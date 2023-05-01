@@ -59,7 +59,7 @@
 #    include <sys/resource.h>
 #endif
 
-#ifdef __GNU__
+#if defined(__GNU__) || defined(__EMSCRIPTEN__)
 #    include <sys/ioctl.h>
 #    include <unistd.h>
 #endif
@@ -284,7 +284,7 @@ Sysutil::this_program_path()
     size_t cb = sizeof(filename);
     int r     = 1;
     sysctl(mib, 4, filename, &cb, NULL, 0);
-#elif defined(__GNU__) || defined(__OpenBSD__) || defined(_WIN32)
+#elif defined(__GNU__) || defined(__OpenBSD__) || defined(_WIN32) || defined(__EMSCRIPTEN__)
     int r = 0;
 #else
     // No idea what platform this is
@@ -338,7 +338,7 @@ Sysutil::terminal_columns()
 
 #if defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) \
     || defined(__FreeBSD_kernel__) || defined(__NetBSD__)            \
-    || defined(__OpenBSD__) || defined(__GNU__)
+    || defined(__OpenBSD__) || defined(__GNU__) || defined(__EMSCRIPTEN__)
     struct winsize w;
     ioctl(0, TIOCGWINSZ, &w);
     columns = w.ws_col;
@@ -363,7 +363,7 @@ Sysutil::terminal_rows()
 
 #if defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) \
     || defined(__FreeBSD_kernel__) || defined(__NetBSD__)            \
-    || defined(__OpenBSD__) || defined(__GNU__)
+    || defined(__OpenBSD__) || defined(__GNU__) || defined(__EMSCRIPTEN__)
     struct winsize w;
     ioctl(0, TIOCGWINSZ, &w);
     rows = w.ws_row;
